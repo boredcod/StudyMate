@@ -12,8 +12,10 @@ import {
   setDoc,
   orderBy,
   query,
-  onSnapshot
+  onSnapshot,
+  updateDoc
 } from 'firebase/firestore';
+
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 const auth = getAuth();
@@ -23,22 +25,26 @@ export default function HomeScreen() {
   const [user_name, setUser_name] = useState("");
   const [user_major, setUser_major] = useState("");
   const [user_year, setUser_year] = useState("");
-  const [friendslist, setFriendslist] = useState([]);
+  
 
   useEffect(()=>{
-    const unsub = onSnapshot(doc(database, "profile", auth.currentUser.uid), (doc) => {
-      setUser_name(doc._document.data.value.mapValue.fields.username.stringValue);
-      setUser_major(doc._document.data.value.mapValue.fields.major.stringValue);
-      setUser_year(doc._document.data.value.mapValue.fields.year.stringValue);
+    const unsub = onSnapshot(doc(database, "profile", auth.currentUser.email), (doc) => {
+      if (doc._document.data == null){
+        
+      }
+      else {
+        setUser_name(doc._document.data.value.mapValue.fields.username.stringValue);
+        setUser_major(doc._document.data.value.mapValue.fields.major.stringValue);
+        setUser_year(doc._document.data.value.mapValue.fields.year.stringValue);
+      }
     });
   },[]);
 
   function edit(){
-    setDoc(doc(database, "profile", auth.currentUser.uid), {
+    updateDoc(doc(database, "profile", auth.currentUser.email), {
       username: user_name,
       major: user_major,
       year: user_year,
-      friendlist: friendslist,
     });
     alert("Done editing!")
   }
@@ -46,36 +52,38 @@ export default function HomeScreen() {
     <View style={styles.container}>
     <KeyboardAwareScrollView>
       <View>
-        <Text style={styles.currentProfile}>Welcome {auth.currentUser.email}! </Text>
+        <Text style={styles.currentProfile}>Welcome {user_name}! </Text>
         <Text> </Text>
         <Text style={styles.currentProfile}>Current Name: {user_name}</Text>
         <Text style={styles.currentProfile}>Current Major: {user_major}</Text>
         <Text style={styles.currentProfile}>Current Year: {user_year}</Text>
+        <Text></Text>
         <Text style={styles.currentProfile}>Edit Your Profile Below</Text>
       </View>
       
+      <View style={styles.editProfile}>
+        <TextInput
+          style={styles.input}
+          placeholder="Name"
+          onChangeText={(e)=>setUser_name(e)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Major"
+          onChangeText={(e) => setUser_major(e)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Year"
+          onChangeText={(e)=>setUser_year(e)}
+        />
+        <Button title ="Save Your Profile" style={styles.button} onPress={() => edit()}/>
+        <Button title="Sign Out" style={styles.button} onPress={() => signOut(auth).then(()=>{
+        }).catch((error) => {
+          console.log(error)
+        })} />
+      </View>
       
-      <TextInput
-        style={styles.input}
-        placeholder="Name"
-        onChangeText={(e)=>setUser_name(e)}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Major"
-        onChangeText={(e) => setUser_major(e)}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Year"
-        onChangeText={(e)=>setUser_year(e)}
-      />
-      <Button title ="Save Your Profile" style={styles.button} onPress={() => edit()}/>
-      <Button title="Sign Out" style={styles.button} onPress={() => signOut(auth).then(()=>{
-        console.log("sign-out")
-      }).catch((error) => {
-        console.log(error)
-      })} />
     </KeyboardAwareScrollView>
     </View>
   );
@@ -91,10 +99,15 @@ const styles = StyleSheet.create({
   },
   currentProfile: {
     fontSize: 20,
+    fontFamily: 'FredokaOne-Regular'
   },
   button: {
     marginTop: 10,
   },
+  editProfile:{
+    marginTop: 50,
+  },
+
   input: {
     height: 40,
     margin: 12,
