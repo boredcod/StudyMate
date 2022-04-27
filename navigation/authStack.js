@@ -9,6 +9,8 @@ import SignOutScreen from '../screens/SignUpScreen';
 const Stack = createStackNavigator();
 
 export default function AuthStack() {
+  //Organized Navigator inside our app. Used to utilize slide navigation Bar
+  //This one is the navigation for users that hasn't logged in yet.
   return (
       <Stack.Navigator>
         <Stack.Screen name="Welcome" component={WelcomeScreen} />

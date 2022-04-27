@@ -1,9 +1,9 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { StackScreenProps } from '@react-navigation/stack';
 import { Button } from 'react-native-elements';
 
 export default function WelcomScreen({navigation}) {
+  //Main Screen, when the user isn't logged in.
     return (
         <View style={styles.container}>
           <Text style={styles.sentences}>Welcome to StudyMate!</Text>

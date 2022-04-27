@@ -1,12 +1,7 @@
-// Import the functions you need from the SDKs you need
+//Configuration code for connecting to Firebase database
 import { initializeApp } from "firebase/app";
 import 'firebase/auth';
 import Constants from 'expo-constants';
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
     apiKey: Constants.manifest?.extra?.firebaseApiKey,
     authDomain: Constants.manifest?.extra?.firebaseAuthDomain,

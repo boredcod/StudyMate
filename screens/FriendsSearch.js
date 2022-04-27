@@ -1,33 +1,24 @@
 import React, {useState, useEffect} from 'react';
 import { StyleSheet, Text, View, TextInput } from 'react-native';
-import { useAuthentication } from '../utils/hooks/useAuthentication';
-import { getAuth, signOut } from 'firebase/auth';
+import { getAuth } from 'firebase/auth';
 import { Button } from 'react-native-elements';
 import { getFirestore } from 'firebase/firestore';
 import {
-  collection,
-  addDoc,
   doc,
   getDoc,
-  setDoc,
-  orderBy,
-  query,
-  onSnapshot,
-  updateDoc,
-  deleteField,
-  arrayUnion
 } from 'firebase/firestore';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
-const auth = getAuth();
 const database = getFirestore();
 export default function FriendsSearch() {
+  //Used to look up profile of users.
   const [user_name, setUser_name] = useState("");
   const [user_major, setUser_major] = useState("");
   const [user_year, setUser_year] = useState("");
   const [friends,setFriends] = useState("");
 
   function edit(){
+  //Function to search an user's profile by corresponding email.
       getDoc(doc(database, "profile", friends)).then(docSnap => {
         if(docSnap.exists()){
             setUser_name(docSnap.data().username);
@@ -37,10 +28,7 @@ export default function FriendsSearch() {
         else {
             alert("no such user!");
         }
-        
         }); 
-     
-    
   }
   
 
@@ -62,7 +50,6 @@ export default function FriendsSearch() {
     </KeyboardAwareScrollView>
     </View>
   );
-  //add Remove Function
 }
 
 const styles = StyleSheet.create({

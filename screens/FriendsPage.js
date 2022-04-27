@@ -1,27 +1,20 @@
 import React, {useState, useEffect} from 'react';
 import { StyleSheet, Text, View, TextInput } from 'react-native';
-import { useAuthentication } from '../utils/hooks/useAuthentication';
-import { getAuth, signOut } from 'firebase/auth';
+import { getAuth} from 'firebase/auth';
 import { Button } from 'react-native-elements';
 import { getFirestore } from 'firebase/firestore';
 import {
-  collection,
-  addDoc,
   doc,
-  getDoc,
-  setDoc,
-  orderBy,
-  query,
   onSnapshot,
   updateDoc,
   deleteField,
-  arrayUnion
 } from 'firebase/firestore';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 const auth = getAuth();
 const database = getFirestore();
 export default function FriendsPage() {
+  //Page to add friends to the friendlist.
   const user_id = auth.currentUser.uid;
   const [friendslist, setFriendslist] = useState({});
   const [user_name, setUser_name] = useState("");
@@ -30,6 +23,7 @@ export default function FriendsPage() {
   const [friends,setFriends] = useState("");
 
   useEffect(()=>{
+  //Automatically checks if there are friends inside a friendlist in the database.
     const unsub = onSnapshot(doc(database, "profile", auth.currentUser.email), (doc) => {
       setUser_name(doc._document.data.value.mapValue.fields.username.stringValue);
       setUser_major(doc._document.data.value.mapValue.fields.major.stringValue);
@@ -39,6 +33,7 @@ export default function FriendsPage() {
   },[]);
 
   function edit(){
+    //Function to add friends. 
     if (friends == ""){
       alert("Please put the Friend name in!")
       return
@@ -53,6 +48,7 @@ export default function FriendsPage() {
   }
   
 function removeFrineds(){
+  //Function to remove friends.
   let temp = "friendlist." + friends;
   if (friends == ""){
     alert("Please put the Friend name in!")
@@ -66,12 +62,13 @@ function removeFrineds(){
   }
   }
 function FriendsLoop(){
+  //Tells the user to add friends if there are no friends.
     if (friendslist == undefined){
       return (
           <Text>It is empty, please add friends</Text>
       )
     }
-    
+  //If there are friends in the friends, print them out on the application.
     else {
       return (
         <Text style={styles.friendslist}><FLHelper /></Text>
@@ -80,6 +77,7 @@ function FriendsLoop(){
     
 }
 function FLHelper(){
+  //Helper function to receive friends from the database.
   let temp = []
   for (const key in friendslist) {
     temp.push(friendslist[key].stringValue + "\n")      
@@ -105,7 +103,6 @@ function FLHelper(){
     </KeyboardAwareScrollView>
     </View>
   );
-  //add Remove Function
 }
 
 const styles = StyleSheet.create({

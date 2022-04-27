@@ -1,12 +1,8 @@
 import React, {
   useState,
-  useEffect,
-  useLayoutEffect,
-  useCallback
 } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity} from 'react-native';
-import { useAuthentication } from '../utils/hooks/useAuthentication';
-import { getAuth, signOut } from 'firebase/auth';
+import { StyleSheet} from 'react-native';
+import { getAuth} from 'firebase/auth';
 import {
     collection,
     addDoc,
@@ -15,14 +11,17 @@ import {
     onSnapshot
   } from 'firebase/firestore';
 import { GiftedChat } from 'react-native-gifted-chat'
-import { Button } from 'react-native-elements';
 import { getFirestore } from 'firebase/firestore';
 const auth = getAuth();
 const database = getFirestore();
 export default function UserBoard() {
+  //Screen for Bulletin-board, where users can chat in real time, to share their
+  //Contacts and look for study buddies.
   const [messages, setMessages] = useState([]);
 
   React.useEffect(() => {
+  //Function to update the bulletin-board real time through connecting with the database
+  //, in case there are new chats.
     const collectionRef = collection(database, 'chats');
     const q = query(collectionRef, orderBy('createdAt', 'desc'));
 
@@ -42,6 +41,7 @@ export default function UserBoard() {
 
 
 const onSend = React.useCallback((messages = []) => {
+  //Function to let users to send a chat. 
     setMessages(previousMessages =>
       GiftedChat.append(previousMessages, messages)
     );

@@ -1,17 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import { StyleSheet, Text, View, TextInput } from 'react-native';
-import { useAuthentication } from '../utils/hooks/useAuthentication';
 import { getAuth, signOut } from 'firebase/auth';
 import { Button } from 'react-native-elements';
 import { getFirestore } from 'firebase/firestore';
 import {
-  collection,
-  addDoc,
   doc,
-  getDoc,
-  setDoc,
-  orderBy,
-  query,
   onSnapshot,
   updateDoc
 } from 'firebase/firestore';
@@ -21,6 +14,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 const auth = getAuth();
 const database = getFirestore();
 export default function HomeScreen() {
+  //Home Screen where you can edit your profile.
   const user_id = auth.currentUser.uid;
   const [user_name, setUser_name] = useState("");
   const [user_major, setUser_major] = useState("");
@@ -28,6 +22,7 @@ export default function HomeScreen() {
   
 
   useEffect(()=>{
+  //Automatically grabs profile data from the database, if the user has set the profile previously.
     const unsub = onSnapshot(doc(database, "profile", auth.currentUser.email), (doc) => {
       if (doc._document.data == null){
         
@@ -41,6 +36,7 @@ export default function HomeScreen() {
   },[]);
 
   function edit(){
+  //Function to edit the profile, and update it on the database.
     updateDoc(doc(database, "profile", auth.currentUser.email), {
       username: user_name,
       major: user_major,

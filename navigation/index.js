@@ -5,6 +5,8 @@ import AuthStack from './authStack';
 import { NavigationContainer } from '@react-navigation/native';
 
 export default function RootNavigation() {
+  //Checks whether there was a user who was previously logged in through the same
+  //device.
   const { user } = useAuthentication();
 
   return (<NavigationContainer>

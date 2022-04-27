@@ -21,6 +21,7 @@ const auth = getAuth();
 const database = getFirestore();
 
 export default function SignUpScreen({navigation}) {
+  //Screen for Signing up.
     const [value, setValue] = React.useState({
         email: '',
         password: '',
@@ -30,6 +31,8 @@ export default function SignUpScreen({navigation}) {
       })
     
     async function signUp() {
+    //Tries to create an user through connecting with firebase. If any of the required fields are empty,
+    //It prohibits the user to create an account.
         if (value.email === '' || value.password === '') {
           setValue({
             ...value,

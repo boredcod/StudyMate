@@ -1,12 +1,12 @@
 import React from 'react';
 import { StyleSheet, TextInput, View, Text} from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import { Button } from 'react-native-elements';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 
 const auth = getAuth();
 
 export default function SignInScreen() {
+  //Screen for Sign in.
     const [value, setValue] = React.useState({
         email: '',
         password: '',
@@ -14,6 +14,8 @@ export default function SignInScreen() {
       })
     
       async function signIn() {
+      //Tries to Sign in an user through connecting with firebase. If any of the required fields are empty,
+      //It prohibits the user to log in.
         if (value.email === '' || value.password === '') {
           setValue({
             ...value,
